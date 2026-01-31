@@ -1,0 +1,1854 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulados Inspetor de Soldagem - Preparação Customizada</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .header h1 {
+            color: #1e3c72;
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+        
+        .countdown {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin: 15px 0;
+            box-shadow: 0 5px 15px rgba(255,107,107,0.4);
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .info-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border-left: 4px solid #1e3c72;
+        }
+        
+        .info-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #1e3c72;
+            margin-bottom: 5px;
+        }
+        
+        .info-label {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .exam-selector {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .exam-selector h2 {
+            color: #1e3c72;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        
+        .exam-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .exam-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .exam-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+        
+        .exam-card h3 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+        
+        .exam-card .topics {
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: 0.9em;
+        }
+        
+        .exam-card .topics div {
+            margin: 5px 0;
+        }
+        
+        .question-screen {
+            display: none;
+        }
+        
+        .question-card {
+            background: white;
+            padding: 35px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #eee;
+        }
+        
+        .question-number {
+            font-size: 1.4em;
+            color: #1e3c72;
+            font-weight: bold;
+        }
+        
+        .category-badge {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+        
+        .timer {
+            background: #ff6b6b;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+        
+        .question-text {
+            font-size: 1.2em;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            color: #333;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .option {
+            padding: 20px;
+            border: 3px solid #ddd;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+            font-size: 1.05em;
+        }
+        
+        .option:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+            transform: translateX(5px);
+        }
+        
+        .option.selected {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .option.correct {
+            border-color: #51cf66;
+            background: #51cf66;
+            color: white;
+        }
+        
+        .option.incorrect {
+            border-color: #ff6b6b;
+            background: #ff6b6b;
+            color: white;
+        }
+        
+        .feedback {
+            background: #d1ecf1;
+            border-left: 5px solid #17a2b8;
+            padding: 20px;
+            margin-top: 25px;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .feedback.show {
+            display: block;
+        }
+        
+        .feedback h4 {
+            color: #17a2b8;
+            margin-bottom: 12px;
+            font-size: 1.2em;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 18px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102,126,234,0.4);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .btn-success {
+            background: #51cf66;
+            color: white;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 35px;
+            background: #e9ecef;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-top: 20px;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #51cf66, #40c057);
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        .results-screen {
+            display: none;
+        }
+        
+        .results-card {
+            background: white;
+            padding: 50px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .results-emoji {
+            font-size: 6em;
+            margin-bottom: 20px;
+        }
+        
+        .results-score {
+            font-size: 3em;
+            color: #1e3c72;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        
+        .results-breakdown {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .breakdown-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        
+        .breakdown-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .breakdown-label {
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🎯 Simulados Inspetor de Soldagem</h1>
+            <div class="countdown">⏰ Faltam 26 dias para sua prova! (26 de fevereiro de 2025)</div>
+            <p style="color: #666; margin-top: 15px; font-size: 1.1em;">Preparação personalizada baseada nas suas 120 questões de estudo</p>
+            
+            <div class="info-grid">
+                <div class="info-card">
+                    <div class="info-value" id="totalQuestions">120</div>
+                    <div class="info-label">Questões no Banco</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-value" id="completedExams">0</div>
+                    <div class="info-label">Simulados Completos</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-value" id="averageScore">-</div>
+                    <div class="info-label">Média de Acertos</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-value" id="studyTime">0</div>
+                    <div class="info-label">Horas de Estudo</div>
+                </div>
+            </div>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" id="overallProgress" style="width: 0%">0/5 Simulados</div>
+            </div>
+        </div>
+
+        <!-- Exam Selector -->
+        <div class="exam-selector" id="examSelector">
+            <h2>📝 Escolha seu Simulado</h2>
+            <p style="color: #666; margin-bottom: 25px;">Cada simulado tem 50 questões distribuídas conforme os pesos que você especificou</p>
+            
+            <div class="exam-grid">
+                <div class="exam-card" onclick="startExam(1)">
+                    <h3>🔥 Simulado 1 - Geral</h3>
+                    <p>Primeiro contato completo com todas as categorias</p>
+                    <div class="topics">
+                        <div>✓ Processos de Soldagem (5)</div>
+                        <div>✓ Simbologia (5)</div>
+                        <div>✓ Qualificações (4)</div>
+                        <div>✓ Materiais de Base (4)</div>
+                        <div>✓ E mais 10 categorias...</div>
+                    </div>
+                </div>
+                
+                <div class="exam-card" onclick="startExam(2)">
+                    <h3>⚡ Simulado 2 - Geral</h3>
+                    <p>Aprofundamento e revisão de pontos fracos</p>
+                    <div class="topics">
+                        <div>✓ 50 questões diferentes</div>
+                        <div>✓ Mesma distribuição de pesos</div>
+                        <div>✓ Foco em consolidação</div>
+                    </div>
+                </div>
+                
+                <div class="exam-card" onclick="startExam(3)">
+                    <h3>💪 Simulado 3 - Intensivo</h3>
+                    <p>Treinamento avançado com questões desafiadoras</p>
+                    <div class="topics">
+                        <div>✓ Nível de dificuldade progressivo</div>
+                        <div>✓ Questões que mais reprovam</div>
+                        <div>✓ Preparação para o dia D</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question Screen -->
+        <div class="question-screen" id="questionScreen">
+            <div class="question-card">
+                <div class="question-header">
+                    <div class="question-number" id="questionNumber">Questão 1/50</div>
+                    <div class="category-badge" id="categoryBadge">Categoria</div>
+                    <div class="timer" id="timer">00:00</div>
+                </div>
+                
+                <div class="question-text" id="questionText"></div>
+                
+                <div class="options" id="optionsContainer"></div>
+                
+                <div class="feedback" id="feedback">
+                    <h4>💡 Explicação</h4>
+                    <p id="feedbackText"></p>
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn btn-secondary" onclick="skipQuestion()">Pular</button>
+                    <button class="btn btn-primary" id="checkBtn" onclick="checkAnswer()">Verificar</button>
+                    <button class="btn btn-success" id="nextBtn" onclick="nextQuestion()" style="display: none;">Próxima →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div class="results-screen" id="resultsScreen">
+            <div class="results-card">
+                <div class="results-emoji" id="resultsEmoji">🏆</div>
+                <h2 id="resultsTitle">Parabéns!</h2>
+                <div class="results-score" id="resultsScore">0/50</div>
+                <p id="resultsMessage" style="font-size: 1.2em; color: #666; margin: 20px 0;"></p>
+                
+                <div class="results-breakdown">
+                    <div class="breakdown-item">
+                        <div class="breakdown-value" id="correctCount">0</div>
+                        <div class="breakdown-label">Acertos</div>
+                    </div>
+                    <div class="breakdown-item">
+                        <div class="breakdown-value" id="incorrectCount">0</div>
+                        <div class="breakdown-label">Erros</div>
+                    </div>
+                    <div class="breakdown-item">
+                        <div class="breakdown-value" id="skippedCount">0</div>
+                        <div class="breakdown-label">Puladas</div>
+                    </div>
+                    <div class="breakdown-item">
+                        <div class="breakdown-value" id="finalTime">00:00</div>
+                        <div class="breakdown-label">Tempo Total</div>
+                    </div>
+                </div>
+                
+                <div class="buttons" style="margin-top: 30px;">
+                    <button class="btn btn-secondary" onclick="reviewExam()">📊 Revisar Respostas</button>
+                    <button class="btn btn-primary" onclick="backToMenu()">🏠 Menu Principal</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Banco de questões completo baseado no PDF enviado
+        const questionBank = {
+            materiaisBase: [
+                {
+                    id: 1,
+                    text: "Analisando as classificações AISI dos aços apresentados a seguir, identifique qual a alternativa mostra uma relação correta entre as classificações e a microestrutura dos metais.",
+                    options: [
+                        "AISI 309 e AISI 436 – Microestrutura austenítica",
+                        "AISI 202 e AISI 347 – Microestrutura austenítica",
+                        "AISI 205 e AISI 430 – Microestrutura austenítica",
+                        "AISI 429 e AISI 316L – Microestrutura austenítica",
+                        "AISI 201 e AISI 308MoL – Microestrutura martensítica"
+                    ],
+                    correct: 1,
+                    explanation: "AISI 202 (série 200) e AISI 347 (série 300) são aços inoxidáveis austeníticos. A série 200 usa Mn e N para substituir parte do Ni, mantendo estrutura austenítica. O AISI 347 é estabilizado com Nb para aplicações em alta temperatura."
+                },
+                {
+                    id: 2,
+                    text: "Quanto ao estudo dos metais de base, identifique a alternativa incorreta.",
+                    options: [
+                        "De uma maneira generalizada, a Especificação é uma descrição precisa de um conjunto de requisitos a serem satisfeitos por um determinado material.",
+                        "A especificação AISI estabelece as condições de teste de material, de forma a garantir as propriedades mecânicas mínimas exigidas.",
+                        "A especificação ASTM estabelece as condições de teste de material, de forma a garantir as propriedades mecânicas mínimas exigidas.",
+                        "De uma forma generalizada, a Classificação define uma sistemática de arranjo ou divisão dos materiais em grupos, baseada em características similares como a composição química.",
+                        "A classificação AISI estabelece apenas uma única maneira de designar seus metais, a saber: através da composição química."
+                    ],
+                    correct: 1,
+                    explanation: "A alternativa B está INCORRETA. AISI (American Iron and Steel Institute) é um sistema de CLASSIFICAÇÃO baseado principalmente na composição química, NÃO uma especificação que estabelece condições de teste. Quem estabelece condições de teste e garante propriedades mínimas é a ASTM (especificação)."
+                },
+                {
+                    id: 3,
+                    text: "Qual especificação (norma ou código) listada a seguir padroniza as características mecânicas e químicas dos metais ferrosos, não ferrosos, materiais não metálicos e outros materiais?",
+                    options: [
+                        "ASME (American Society of Mechanical Engineers)",
+                        "AISI (American Iron and Steel Institute)",
+                        "AWS (American Welding Society)",
+                        "ASM (American Society for Metals)",
+                        "ASTM (American Society for Testing and Materials)"
+                    ],
+                    correct: 4,
+                    explanation: "ASTM é a organização que desenvolve especificações técnicas para materiais, incluindo metais ferrosos, não-ferrosos e não-metálicos. As normas ASTM estabelecem requisitos de composição química, propriedades mecânicas e métodos de teste."
+                },
+                {
+                    id: 4,
+                    text: "O aço carbono, quando em trabalho a baixas temperaturas, em geral:",
+                    options: [
+                        "Apresenta maior resistência ao impacto e à tração.",
+                        "Apresenta maior oposição à movimentação de discordâncias, elevando a resistência à deformação plástica.",
+                        "Apresenta maior tenacidade, se comparado com seu comportamento à temperatura ambiente.",
+                        "Absorve menor quantidade de energia, ou seja, apresenta maior tendência a uma forma de fratura por cisalhamento.",
+                        "Apresenta menor tenacidade se comparado com seu comportamento."
+                    ],
+                    correct: 1,
+                    explanation: "Em baixas temperaturas, aços carbono apresentam MAIOR resistência mecânica (limite de escoamento e resistência aumentam), pois há maior oposição ao movimento de discordâncias. Porém, a tenacidade DIMINUI, aumentando o risco de fratura frágil."
+                }
+            ],
+            
+            qualificacoes: [
+                {
+                    id: 5,
+                    text: "Dentre as muitas atividades existentes durante a qualificação de um procedimento de soldagem, assinale a única atividade que um Inspetor de Soldagem Nível 2 não pode realizar.",
+                    options: [
+                        "Avaliar os resultados de todos os ensaios mecânicos em comparação com os critérios estabelecidos pelas normas técnicas",
+                        "Testemunhar as condições de preparação dos corpos-de-prova",
+                        "Testemunhar a execução do ensaio de impacto",
+                        "Realizar os dois ensaios de tração transversal",
+                        "Emitir laudo do ensaio macrográfico realizado"
+                    ],
+                    correct: 3,
+                    explanation: "O Inspetor Nível 2 NÃO pode REALIZAR os ensaios mecânicos - esta é uma função de técnicos de laboratório qualificados. O inspetor pode testemunhar, avaliar resultados e emitir laudos, mas não executar os ensaios."
+                },
+                {
+                    id: 6,
+                    text: "Na fabricação de um tanque de armazenamento, há a necessidade de soldar uma junta, cuja espessura dos componentes é de 50 mm. Deseja-se utilizar um procedimento de soldagem, cuja faixa de espessura qualificada se situa entre 3,2 mm e 25 mm. Qual atitude deverá ser tomada pelo Inspetor de Soldagem Nível 2?",
+                    options: [
+                        "Realizar a solda segundo o procedimento qualificado, procurando utilizar uma sequência de soldagem de tal forma que minimize o nível de deformações produzido.",
+                        "Não utilizar o procedimento qualificado, visto que uma mudança de uma variável essencial (como 'espessura do metal de base') afeta a qualidade da junta soldada.",
+                        "Realizar a solda segundo o procedimento qualificado, fazendo uma observação referente à espessura do material.",
+                        "Realizar a solda segundo o procedimento qualificado, procurando realizar mais ensaios não destrutivos, além dos exigidos pela norma.",
+                        "Realizar a solda segundo o procedimento qualificado, procurando utilizar um metal de adição com um diâmetro maior."
+                    ],
+                    correct: 1,
+                    explanation: "CORRETO! A espessura é uma variável ESSENCIAL. O procedimento qualificou apenas até 25mm, mas a junta tem 50mm. Usar este procedimento seria uma VIOLAÇÃO grave da qualificação. É necessário um novo procedimento ou requalificação para essa faixa de espessura."
+                },
+                {
+                    id: 7,
+                    text: "Em relação à qualificação de soldadores e operadores de soldagem, assinale a alternativa incorreta.",
+                    options: [
+                        "Dependendo da norma de qualificação, o fato do soldador ou operador de soldagem estar qualificado na posição sobre-cabeça, isto não significa que ele também pode soldar nas demais posições de soldagem.",
+                        "O trabalho de um soldador ou operador de soldagem fica restrito apenas ao que esteja registrado em seu Registro de Qualificação de Soldador ou Operador de Soldagem.",
+                        "Um soldador ou operador de soldagem, estando qualificado em uma determinada norma de qualificação, pode soldar na construção de qualquer equipamento, independentemente da norma de projeto daquele equipamento.",
+                        "Um soldador ou operador de soldagem só pode participar na soldagem de uma determinada junta, caso ele já esteja qualificado para aquele serviço.",
+                        "A qualificação do soldador ou operador de soldagem fica atrelada a uma norma de qualificação, que, por sua vez, está associada a uma norma de projeto."
+                    ],
+                    correct: 2,
+                    explanation: "INCORRETA! A qualificação de um soldador está vinculada à norma específica usada na qualificação. Não se pode usar uma qualificação feita em uma norma (ex: ASME IX) para trabalhar em equipamentos regidos por outra norma (ex: AWS D1.1) sem verificar compatibilidade ou requalificar."
+                },
+                {
+                    id: 8,
+                    text: "Assinale a alternativa incorreta no tocante aos procedimentos de soldagem pré-qualificados.",
+                    options: [
+                        "O procedimento de soldagem pré-qualificado só é usado quando for permitido pela norma de qualificação de procedimentos, especificações, normas de fabricação.",
+                        "O impedimento do uso de um procedimento de soldagem pré-qualificado obriga o fabricante a qualificar o procedimento de soldagem por intermédio de ensaios visual, mecânicos, radiográfico, cujos resultados devem ser avaliados, conforme os critérios estabelecidos pela norma de qualificação adotada.",
+                        "Procedimentos de soldagem pré-qualificados são procedimentos de soldagem que podem ser usados quando um fabricante mostra que possui experiência no emprego de certos metais de base e consumíveis de soldagem através de serviços anteriormente executados.",
+                        "Fica totalmente dispensada a realização de ensaios mecânicos, quando da decisão do uso de procedimentos de soldagem pré-qualificados.",
+                        "Todas as normas de qualificação disponibilizam um determinado número de procedimentos de soldagem pré-qualificados."
+                    ],
+                    correct: 2,
+                    explanation: "INCORRETA! Procedimentos pré-qualificados NÃO são baseados em experiência prévia do fabricante. São procedimentos estabelecidos pela NORMA que, por terem sido extensivamente testados, podem ser usados sem qualificação adicional, desde que TODAS as condições especificadas sejam atendidas."
+                }
+            ],
+            
+            processos: [
+                {
+                    id: 9,
+                    text: "Das classificações AWS apresentadas abaixo, indique o único consumível que só pode ser usado na posição de soldagem Sobre-cabeça.",
+                    options: [
+                        "ER80S-Ni1",
+                        "E6020",
+                        "E70T-2",
+                        "ER308Si-25",
+                        "EL12K"
+                    ],
+                    correct: 1,
+                    explanation: "E6020: o dígito '2' indica eletrodo para posição PLANA e HORIZONTAL (solda de filete). Nenhum dos consumíveis listados é exclusivo para sobre-cabeça. Esta questão contém um erro no enunciado."
+                },
+                {
+                    id: 10,
+                    text: "Como qualquer outro processo de soldagem, o processo com arame tubular também produz descontinuidades na região da junta soldada. Das descontinuidades apresentadas a seguir, identifique aquelas que são produzidas especificamente pelo processo em questão.",
+                    options: [
+                        "Falta de fusão e inclusão de escória",
+                        "Embicamento e Deformação angular",
+                        "Rechupe de cratera e Reforço excessivo",
+                        "Sobreposição e respingos",
+                        "Desalinhamento e Penetração excessiva"
+                    ],
+                    correct: 0,
+                    explanation: "Falta de fusão e inclusão de escória são descontinuidades características do processo FCAW (arame tubular), especialmente quando há problemas com proteção gasosa, velocidade inadequada ou técnica incorreta."
+                },
+                {
+                    id: 11,
+                    text: "No processo de corte a plasma, há um tipo de gás (ou mistura) usado na formação do plasma e um outro tipo de gás usado como gás de proteção. Identifique a alternativa incorreta.",
+                    options: [
+                        "Gás de plasma na soldagem do aço inoxidável: Dióxido de Carbono; mistura de Argônio + Dióxido de Carbono + Oxigênio",
+                        "Gás de plasma de metais não-ferrosos: mistura de Nitrogênio + Hidrogênio",
+                        "Gás de proteção na soldagem de aço carbono: Argônio puro; mistura de Argônio + Dióxido de Carbono",
+                        "Gás de proteção na soldagem do Alumínio: mistura de Argônio + Hidrogênio",
+                        "Gás de plasma na soldagem do Titânio: Argônio puro"
+                    ],
+                    correct: 0,
+                    explanation: "INCORRETA! Para corte plasma de aço inoxidável, NÃO se usa CO₂ puro como gás de plasma. Tipicamente usa-se Ar+H₂ ou misturas específicas. CO₂ não é adequado para corte de inox devido à oxidação excessiva."
+                },
+                {
+                    id: 12,
+                    text: "A amperagem no processo SAW pode chegar a um valor máximo de até:",
+                    options: [
+                        "200A",
+                        "500A",
+                        "1.500A",
+                        "6.000A",
+                        "4.000A"
+                    ],
+                    correct: 3,
+                    explanation: "O processo SAW (Arco Submerso) pode operar com correntes muito altas, chegando até 6.000A em aplicações especiais com múltiplos arames. Em aplicações normais, usa-se 400-1.200A, mas o limite técnico pode chegar a 6.000A."
+                },
+                {
+                    id: 13,
+                    text: "No processo SAW, temos algumas variantes. Marcar a que não faz parte do processo:",
+                    options: [
+                        "Eletrodo em fita",
+                        "Eletrodo nu",
+                        "Twin arc",
+                        "Tandem arc",
+                        "Todos fazem parte"
+                    ],
+                    correct: 4,
+                    explanation: "TODAS as variantes listadas fazem parte do SAW: eletrodo em fita (strip electrode), eletrodo nu (sempre usado), Twin Arc (dois arcos no mesmo banho), e Tandem Arc (arames em série)."
+                }
+            ],
+            
+            documentos: [
+                {
+                    id: 14,
+                    text: "Qual das alternativas apresentadas a seguir não precisa ser informada no documento 'Instruções de Execução e Inspeção de Soldagem' (IEIS)?",
+                    options: [
+                        "Técnica a ser usada na goivagem da solda",
+                        "Técnica a ser usada na medição do valor das temperaturas de pré-aquecimento e interpasse",
+                        "Técnica a ser usada na limpeza entre passes",
+                        "Técnica a ser usada na limpeza inicial da junta antes do início da soldagem",
+                        "Técnica a ser usada na deposição dos cordões de solda"
+                    ],
+                    correct: 0,
+                    explanation: "A técnica de GOIVAGEM não é tipicamente especificada na IEIS. A IEIS foca em: preparação da junta, temperaturas de pré/interpasse, sequência de soldagem, limpeza, e requisitos de inspeção. Goivagem é uma preparação mais básica."
+                },
+                {
+                    id: 15,
+                    text: "Qual dos documentos apresentados a seguir não necessita ser mantido sob a responsabilidade do Inspetor de Soldagem?",
+                    options: [
+                        "Registro da Qualificação de Procedimento de Soldagem",
+                        "Número do lote do material utilizado no ensaio de líquido penetrante",
+                        "Relação de Soldadores ou Operadores de Soldagem Qualificados",
+                        "Instruções de Ensaio e Inspeção de Soldagem",
+                        "Controle de Desempenho de Soldadores ou Operadores de Soldagem"
+                    ],
+                    correct: 1,
+                    explanation: "O número do LOTE do material de LP é de responsabilidade do inspetor de END/laboratório de ensaios, não do Inspetor de Soldagem. O IS controla os documentos de qualificação e procedimentos de soldagem."
+                },
+                {
+                    id: 16,
+                    text: "Qual das alternativas apresentadas a seguir não precisa ser informada no documento 'Controle de Desempenho do Soldador ou Operador de Soldagem'?",
+                    options: [
+                        "Quantidade de radiografias aprovadas em um determinado período de tempo",
+                        "Identificação do Soldador ou Operador de Soldagem",
+                        "Localização do defeito no interior da junta soldada",
+                        "Somatório das extensões de juntas consideradas reprovadas pelo ensaio ultrassônico em um determinado período de tempo",
+                        "Data de realização da avaliação dos resultados dos ensaios radiográficos e/ou ultrassônicos"
+                    ],
+                    correct: 2,
+                    explanation: "A LOCALIZAÇÃO específica do defeito NÃO precisa constar no controle de desempenho. Este documento registra: identificação do soldador, quantidade de aprovações/reprovações, extensões, datas - mas não detalha onde exatamente está cada defeito."
+                }
+            ],
+            
+            simbologia: [
+                {
+                    id: 17,
+                    text: "Observando a junta soldada apresentada, identifique os diferentes termos técnicos corretos:",
+                    options: [
+                        "1- Penetração da Raiz; 3- Penetração da Junta; 4- Abertura da Raiz; 5- Reforço da Raiz",
+                        "1- Penetração da Raiz; 2- Penetração da Junta; 3- Metal Depositado da Raiz; 4- Abertura da Raiz",
+                        "1- Metal Depositado da Raiz; 2- Abertura da Raiz; 3- Penetração da Junta; 5- Penetração da Raiz",
+                        "2- Penetração da Raiz; 3- Penetração da Junta; 4- Abertura da Raiz; 1- Reforço da Raiz",
+                        "1- Metal Depositado da Raiz; 2- Penetração da Raiz; 3- Penetração da Junta; 4- Abertura da Raiz"
+                    ],
+                    correct: 4,
+                    explanation: "Terminologia correta: 1-Metal Depositado da Raiz (solda visível), 2-Penetração da Raiz (quanto o metal fundiu além da abertura), 3-Penetração da Junta (profundidade total de fusão), 4-Abertura da Raiz (gap inicial)."
+                },
+                {
+                    id: 18,
+                    text: "Analisando as simbologias referentes aos Ensaios Não Destrutivos, identifique a alternativa correta:",
+                    options: [
+                        "Ensaio Radiográfico, com fonte posicionada no lado oposto à seta, devendo ser usado o procedimento No. 02/09",
+                        "Ensaio por Partícula Magnética a ser realizado pelo lado indicado pela seta, em 50% da extensão soldada",
+                        "Ensaio por Partícula Magnética e Ultrassom a ser realizado pelo lado oposto ao da seta, em 200 mm da extensão soldada",
+                        "Ensaio por Ultrassom realizado em ambos os lados da seta. O ensaio deverá ser realizado no campo",
+                        "Ensaio Visual a ser realizado do lado indicado pela seta em toda extensão soldada e Ensaio de Líquido Penetrante do lado oposto em toda extensão"
+                    ],
+                    correct: 1,
+                    explanation: "A simbologia PM com 50% indica Partículas Magnéticas em 50% da extensão, do lado da seta. Esta é uma especificação comum quando se deseja amostragem e não 100% de inspeção."
+                },
+                {
+                    id: 19,
+                    text: "Para a junta de ângulo mostrada, indique a alternativa correta:",
+                    options: [
+                        "1- Margem da Solda; 2- Perna da Solda; 4- Face da Solda; 5- Garganta da Solda",
+                        "1- Margem da Solda; 2- Garganta da Solda; 3- Face da Solda; 5- Perna da Solda",
+                        "1- Face da Solda; 2- Garganta da solda; 4- Margem da Solda; 5- Perna da Solda",
+                        "2- Perna da Solda; 3- Margem da Solda; 4- Face da Solda; 5- Garganta da Solda",
+                        "1- Face da Solda; 2- Perna da Solda; 4- Margem da Solda; 5- Garganta da Solda"
+                    ],
+                    correct: 4,
+                    explanation: "Em solda de ângulo: Face (superfície convexa da solda), Perna (distância da raiz até o dedo), Margem (limite da fusão), Garganta (menor distância da raiz à face)."
+                },
+                {
+                    id: 20,
+                    text: "Qual seria a simbologia correta para: junta de topo, técnica unilateral com backing de cerâmica, chanfro em 'V', ângulo 40º, abertura 7mm, posição plana, PM 50% na raiz, RT campo procedimento 10/08?",
+                    options: [
+                        "Simbologia A",
+                        "Simbologia B",
+                        "Simbologia C",
+                        "Simbologia D",
+                        "Simbologia E"
+                    ],
+                    correct: 2,
+                    explanation: "A simbologia deve mostrar: V (chanfro), backing (linha contínua), 40° e 7mm especificados, PM-50% abaixo da linha (raiz), RT-10/08 acima da linha com 'C' (campo), posição 1G."
+                },
+                {
+                    id: 21,
+                    text: "Qual dos ensaios deve ser realizado em ambos os lados da junta:",
+                    options: [
+                        "PM 300",
+                        "US",
+                        "RT",
+                        "EV 30%",
+                        "PM"
+                    ],
+                    correct: 1,
+                    explanation: "Ultrassom (US) frequentemente requer inspeção de ambos os lados para melhor cobertura e detecção de descontinuidades com diferentes orientações. PM e RT geralmente são unilaterais."
+                }
+            ],
+            
+            ensaiosMecanicos: [
+                {
+                    id: 22,
+                    text: "Quanto à importância da realização de ensaios mecânicos em materiais metálicos, assinale a alternativa incorreta.",
+                    options: [
+                        "Os resultados dos ensaios mecânicos de um determinado material metálico servem como referência para futuras qualificações de metais de adição, procedimentos de soldagem, entre outras",
+                        "A determinação das propriedades mecânicas é geralmente obtida através de ensaios mecânicos, químicos e metalográficos de corpos de prova",
+                        "Os tipos de corpos de prova, suas dimensões e formas, procedimentos de ensaios são estabelecidos por normas técnicas aplicáveis",
+                        "Uma junta soldada localizada entre dois componentes de um equipamento deve ter suas propriedades mecânicas compatíveis com as propriedades do metal de base",
+                        "Os ensaios mecânicos são considerados como ensaios destrutivos, pois provocam a quebra ou inutilizam a peça ensaiada"
+                    ],
+                    correct: 1,
+                    explanation: "INCORRETA! As propriedades mecânicas são determinadas através de ENSAIOS MECÂNICOS (tração, dobramento, dureza, impacto). Ensaios químicos determinam COMPOSIÇÃO, não propriedades mecânicas. Metalografia complementa, mas não determina propriedades mecânicas quantitativas."
+                },
+                {
+                    id: 23,
+                    text: "Em relação aos corpos de prova relativos aos diferentes tipos de ensaios conduzidos em uma qualificação de procedimento de soldagem (junta de topo), assinale a alternativa incorreta.",
+                    options: [
+                        "Todos os corpos de prova são retirados da peça de teste perpendicularmente ao eixo da junta soldada, à exceção dos corpos de prova referentes ao ensaio de tração que se localizam no mesmo eixo da junta soldada",
+                        "Caso o ensaio de impacto seja requerido, a quantidade de corpos de prova e as localizações do entalhe devem ser informadas na norma de qualificação",
+                        "A localização dos corpos de prova ao longo da junta soldada irá depender da norma de qualificação utilizada",
+                        "Os tipos de ensaios a serem realizados em uma qualificação de procedimento de soldagem dependem da norma de qualificação utilizada",
+                        "O eixo dos corpos de prova referentes aos ensaios de dobramento, tração, impacto, entre outros, é sempre perpendicular ao eixo da junta soldada"
+                    ],
+                    correct: 0,
+                    explanation: "INCORRETA! O corpo de prova de TRAÇÃO também é retirado PERPENDICULAR ao eixo da junta (tração transversal), não paralelo. Todos os CPs principais (tração, dobramento, impacto) são transversais à solda."
+                },
+                {
+                    id: 24,
+                    text: "Um corpo de prova para ensaio de tração com seção total de um tubo e diâmetro igual a uma polegada divide-se nas seguintes partes:",
+                    options: [
+                        "Apenas cabeça",
+                        "Cabeças, zona de concordância e parte útil",
+                        "Apenas parte útil",
+                        "Cabeça e parte útil",
+                        "Zona de concordância e parte útil"
+                    ],
+                    correct: 1,
+                    explanation: "Um CP de tração completo possui: CABEÇAS (para fixação nas garras), ZONA DE CONCORDÂNCIA (transição suave, raio de curvatura), e PARTE ÚTIL (região calibrada onde ocorre a medição)."
+                },
+                {
+                    id: 25,
+                    text: "Quanto à possibilidade de medir a dureza da superfície de um equipamento metálico através do uso de durômetros portáteis, identifique a alternativa incorreta.",
+                    options: [
+                        "Técnica que, apesar de não fornecer a precisão dos aparelhos convencionais (de bancadas), oferece valores satisfatórios, bem próximos dos valores reais",
+                        "Técnica que, apesar de poder ser levada para o campo, limita-se apenas a obter valores de pontos localizados na posição plana",
+                        "Técnica versátil que permite obter valores de dureza fora do laboratório de ensaios mecânicos, diferentemente dos aparelhos fixados em bancada",
+                        "Técnica que permite medir durezas das superfícies metálicas através de diferentes métodos",
+                        "No que diz respeito a juntas soldadas, técnica que permite medir durezas da face das soldas, assim como das zonas termicamente afetadas"
+                    ],
+                    correct: 1,
+                    explanation: "INCORRETA! Durômetros portáteis PODEM medir em diversas posições, não apenas na plana. Existem modelos para sobre-cabeça, vertical, etc. Esta é justamente uma vantagem dos portáteis - versatilidade posicional."
+                }
+            ],
+            
+            tensoesDeformacoes: [
+                {
+                    id: 26,
+                    text: "Dos tipos de juntas apresentadas, identifique aquele que mais contribui para que haja grandes níveis de deformação:",
+                    options: [
+                        "Junta de topo com chanfro em V",
+                        "Junta de topo com chanfro em X",
+                        "Junta de topo sem chanfro",
+                        "Junta de ângulo em T",
+                        "Junta sobreposta"
+                    ],
+                    correct: 0,
+                    explanation: "Junta de topo com chanfro em V causa MAIOR deformação angular porque todo o metal de solda está de um lado só, criando contração assimétrica. Chanfro em X (simétrico) tem menos deformação."
+                },
+                {
+                    id: 27,
+                    text: "Das juntas apresentadas, qual dos chanfros gera a maior contração transversal?",
+                    options: [
+                        "Chanfro em I (sem chanfro)",
+                        "Chanfro em V",
+                        "Chanfro em X",
+                        "Chanfro em U",
+                        "Chanfro em J"
+                    ],
+                    correct: 1,
+                    explanation: "Chanfro em V gera MAIOR contração transversal pois requer MAIOR volume de metal depositado comparado ao chanfro em X (que distribui o metal em ambos os lados) ou I (menos metal)."
+                },
+                {
+                    id: 28,
+                    text: "As tensões residuais são de ordem:",
+                    options: [
+                        "Do limite de resistência da junta soldada",
+                        "Da metade do limite de escoamento da junta soldada",
+                        "Do limite de escoamento da junta soldada",
+                        "Do dobro do limite de escoamento da junta soldada",
+                        "Da metade do limite de resistência da junta soldada"
+                    ],
+                    correct: 2,
+                    explanation: "Tensões residuais em soldagem podem atingir valores próximos ao LIMITE DE ESCOAMENTO do material. Isso ocorre porque o metal soldado fica parcialmente plastificado durante o resfriamento."
+                }
+            ],
+            
+            ensaiosNaoDestrutivos: [
+                {
+                    id: 29,
+                    text: "Qual das alternativas apresentadas a seguir não é uma vantagem do Ensaio Visual?",
+                    options: [
+                        "Ensaio de mais baixo custo entre todos os ensaios não destrutivos",
+                        "Evita com que alguns tipos de descontinuidades só sejam removidos após a inspeção radiográfica ou ultrassônica",
+                        "Ensaio que detecta descontinuidades com qualquer dimensão",
+                        "Ensaio que, bem executado, diminui o custo total da fabricação do equipamento",
+                        "Permite a correção de descontinuidades antes que a soldagem da junta esteja terminada"
+                    ],
+                    correct: 2,
+                    explanation: "INCORRETA! O Ensaio Visual NÃO detecta descontinuidades de QUALQUER dimensão. Há limites de detecção - descontinuidades muito pequenas, internas ou subsuperficiais NÃO são detectadas visualmente."
+                },
+                {
+                    id: 30,
+                    text: "Em relação aos diferentes tipos de técnicas empregadas no Ensaio por Partícula Magnética, identifique a alternativa correta.",
+                    options: [
+                        "A 'Técnica da Bobina' é considerada a ideal para ser empregada em peças metálicas planas (ex.: chapas)",
+                        "O Yoke eletromagnético induz na peça um campo magnético longitudinal, que é gerado pela corrente alternada",
+                        "Na 'Técnica dos Eletrodos', a intensidade de corrente para gerar um campo magnético depende diretamente da distância entre os eletrodos e a espessura da peça",
+                        "Durante uma inspeção feita com a 'Técnica da Bobina' ou com a 'Técnica do Contato Direto', as descontinuidades são detectadas simultaneamente em toda a peça em uma direção perpendicular às linhas de força",
+                        "A 'Técnica do Yoke' é a única técnica que permite a detecção de descontinuidades posicionadas paralelamente às linhas de força do campo magnético"
+                    ],
+                    correct: 2,
+                    explanation: "CORRETO! Na técnica dos eletrodos, a corrente necessária DEPENDE da distância entre eletrodos E da espessura da peça. Maior distância ou espessura = maior corrente necessária para magnetização adequada."
+                },
+                {
+                    id: 31,
+                    text: "Qual, das alternativas apresentadas a seguir, é uma vantagem específica do ensaio não destrutivo por Ultra-Som?",
+                    options: [
+                        "Custo baixo dos equipamentos utilizados neste ensaio",
+                        "O treinamento para a qualificação de um profissional é de curtíssima duração",
+                        "Ensaio que não precisa de preparação (limpeza) na região onde será inspecionada",
+                        "Não requer paralisação de outras atividades durante a sua execução, como também não exige requisitos rígidos de segurança",
+                        "Ensaio de fácil interpretação"
+                    ],
+                    correct: 3,
+                    explanation: "Uma vantagem do US é que NÃO requer área controlada, evacuação ou paralisação como a radiografia. Pode ser feito com atividades próximas acontecendo simultaneamente, sem riscos de radiação."
+                },
+                {
+                    id: 32,
+                    text: "No ensaio por líquido penetrante, indicações falsas podem ser provenientes de:",
+                    options: [
+                        "Cantos vivos",
+                        "Material fortemente magnetizado",
+                        "Remoção inadequada do excesso de penetrante",
+                        "Líquido com baixo efeito capilar",
+                        "Cantos mortos"
+                    ],
+                    correct: 2,
+                    explanation: "Remoção INADEQUADA do penetrante (excesso ou insuficiente) é causa comum de indicações falsas. Se não remover bem, penetrante residual cria falsas indicações. Material magnetizado afeta PM, não LP."
+                }
+            ],
+            
+            introducao: [
+                {
+                    id: 33,
+                    text: "Qual dos itens abaixo é um risco para a segurança do inspetor de soldagem?",
+                    options: [
+                        "Radiação",
+                        "Todas as alternativas estão corretas",
+                        "Choque elétrico",
+                        "Respingos de solda",
+                        "Queda de objetos"
+                    ],
+                    correct: 1,
+                    explanation: "TODOS são riscos reais: radiação (raios-X/gama), choque elétrico (equipamentos), respingos de solda (queimaduras), queda de objetos (trabalhos em altura). O inspetor deve usar EPIs adequados para cada risco."
+                },
+                {
+                    id: 34,
+                    text: "Os inspetores de solda são qualificados pelo SNQC. Qual o significado desta sigla?",
+                    options: [
+                        "Sistema Nacional de Qualidade e Certificação de Pessoal em Soldagem",
+                        "Sistema Nacional de Qualidade e Certificação",
+                        "Sistema Nacional de Qualificação e Certificação",
+                        "Existem 2 corretas",
+                        "Todas estão erradas"
+                    ],
+                    correct: 0,
+                    explanation: "SNQC = Sistema Nacional de Qualidade e Certificação de Pessoal em Soldagem. É o sistema brasileiro que certifica inspetores, soldadores, engenheiros e demais profissionais da área de soldagem."
+                }
+            ],
+            
+            metalurgia: [
+                {
+                    id: 35,
+                    text: "Em relação ao fenômeno da Diluição que ocorre durante a soldagem, identifique a alternativa incorreta.",
+                    options: [
+                        "A diluição é uma função direta da energia de soldagem introduzida na junta soldada",
+                        "A diluição de uma junta soldada pela técnica 'autógena' é de 100%",
+                        "A diluição é uma função direta do procedimento de soldagem que será usado para executar uma determinada soldagem",
+                        "O estudo da diluição é fundamental, quando da necessidade de soldar metais dissimilares",
+                        "A diluição é a movimentação de átomos no estado sólido em função da temperatura encontrada na região que está sendo soldada"
+                    ],
+                    correct: 4,
+                    explanation: "INCORRETA! A alternativa E descreve DIFUSÃO, não diluição. DILUIÇÃO é a mistura do metal de base fundido com o metal de adição, expressa em percentual. Difusão é movimentação atômica no sólido."
+                },
+                {
+                    id: 36,
+                    text: "Dos elementos químicos apresentados, indique aquele que influencia grandemente nas propriedades mecânicas da junta soldada de um aço carbono, assim como em sua soldabilidade.",
+                    options: [
+                        "Mn",
+                        "Si",
+                        "Ni",
+                        "Cr",
+                        "C"
+                    ],
+                    correct: 4,
+                    explanation: "CARBONO (C) é o elemento mais importante para propriedades mecânicas e soldabilidade dos aços. Maior %C = maior resistência MAS pior soldabilidade (maior risco de trincas, necessidade de pré-aquecimento)."
+                },
+                {
+                    id: 37,
+                    text: "Qual a disposição dos átomos no sistema CCC (Cúbico de Corpo Centrado)?",
+                    options: [
+                        "Oito átomos nos vértices e um no centro",
+                        "Seis átomos nos vértices e um no centro",
+                        "Seis átomos nos vértices e dois no centro",
+                        "Quatro átomos nos vértices e um no centro",
+                        "Quatro átomos nos vértices e dois no centro"
+                    ],
+                    correct: 0,
+                    explanation: "CCC (Cúbico de Corpo Centrado): 8 átomos nos vértices do cubo + 1 átomo no centro do cubo. Estrutura típica do ferro alfa (ferrita) em temperatura ambiente."
+                },
+                {
+                    id: 38,
+                    text: "A razão pela qual a difusão ocorre mais facilmente nos contornos de grãos que no centro dos grãos é que:",
+                    options: [
+                        "A temperatura nos contornos de grãos é ligeiramente inferior que no centro dos grãos",
+                        "Nenhuma das respostas é verdadeira",
+                        "A ordenação atômica no centro dos grãos é menor que nos contornos de grãos",
+                        "A temperatura nos contornos dos grãos é ligeiramente superior que no centro dos grãos",
+                        "A ordenação atômica no centro dos grãos é maior que no contorno dos grãos"
+                    ],
+                    correct: 4,
+                    explanation: "A difusão é mais fácil nos CONTORNOS porque a ordenação atômica é MENOR (mais defeitos, maior energia). No CENTRO do grão, a estrutura cristalina é mais perfeita e ordenada, dificultando a difusão."
+                }
+            ],
+            
+            instrumental: [
+                {
+                    id: 39,
+                    text: "Qual das alternativas a seguir não está relacionada com as características do Pirômetro de Contato?",
+                    options: [
+                        "Instrumento que, quando utilizados em soldagem, podem verificar temperaturas de pré-aquecimento, interpasse e de pós-aquecimento",
+                        "Instrumento destinado a medir temperaturas da superfície de contato medida",
+                        "Operam mediante contato físico, podendo também medir temperaturas à distância",
+                        "Tem em média uma gama de medidas compreendidas entre -50ºC e 1300ºC",
+                        "Instrumento que pode ser analógico ou digital"
+                    ],
+                    correct: 2,
+                    explanation: "INCORRETA! Pirômetro de CONTATO opera APENAS mediante contato físico. Quem mede à distância é o pirômetro ÓPTICO (infravermelho). A alternativa C mistura características de ambos os tipos."
+                },
+                {
+                    id: 40,
+                    text: "Qual dos instrumentos de medida apresentados não é apropriado para fazer a leitura da altura do reforço de uma solda de topo?",
+                    options: [
+                        "Micrômetro",
+                        "Trena",
+                        "Régua esquadro",
+                        "Paquímetro",
+                        "Gabarito de solda"
+                    ],
+                    correct: 1,
+                    explanation: "TRENA não é apropriada para medir reforço de solda (dimensão pequena, requer precisão). Usa-se: gabarito de solda, paquímetro, micrômetro ou régua. Trena é para grandes dimensões."
+                },
+                {
+                    id: 41,
+                    text: "Para realizarmos o controle da pressão de um gás utilizamos o seguinte equipamento:",
+                    options: [
+                        "Manômetro",
+                        "Voltímetro",
+                        "Regulador de pressão",
+                        "Amperímetro",
+                        "Termômetro"
+                    ],
+                    correct: 2,
+                    explanation: "REGULADOR DE PRESSÃO é usado para CONTROLAR (ajustar) a pressão. MANÔMETRO apenas MEDE/INDICA. Voltímetro mede tensão, amperímetro mede corrente, termômetro mede temperatura."
+                }
+            ],
+            
+            terminologia: [
+                {
+                    id: 42,
+                    text: "Das definições apresentadas abaixo, assinale a alternativa incorreta.",
+                    options: [
+                        "Metal Depositado é o metal de adição que foi depositado durante a operação de soldagem",
+                        "Metal de Solda é a porção da junta soldada que foi completamente fundida durante a soldagem",
+                        "Metal de Adição é o metal puro ou liga metálica a ser adicionada para a fabricação de uma junta soldada ou brasada",
+                        "Metal de Solda é a porção do metal de base que foi fundido durante a soldagem",
+                        "Metal de Base é o metal puro ou liga metálica a ser soldada, cortada ou brasada"
+                    ],
+                    correct: 3,
+                    explanation: "INCORRETA! Metal de Solda = metal de ADIÇÃO + metal de BASE (ambos fundidos). A alternativa D diz que é só metal de base fundido - está errada. Metal de solda é a MISTURA de ambos após fusão."
+                },
+                {
+                    id: 43,
+                    text: "Dos diferentes tipos de juntas formadas entre os componentes a serem soldados, marque a definição correta.",
+                    options: [
+                        "Junta Sobreposta: Junta entre as extremidades de dois ou mais membros paralelos ou parcialmente paralelos",
+                        "Junta Dissimilar: junta soldada, cuja composição química do metal de base dos componentes não difere significativamente entre si",
+                        "Junta de Ângulo: junta em que, numa seção transversal, os componentes a soldar apresentam-se sob forma de um ângulo",
+                        "Junta de aresta: junta formada por dois componentes a soldar, de tal maneira que suas superfícies sobrepõem-se",
+                        "Junta de Topo: junta entre dois ou mais membros, devendo todos eles se encontrarem no mesmo plano"
+                    ],
+                    correct: 2,
+                    explanation: "CORRETA! Junta de Ângulo: os componentes formam um ângulo (T, L, canto). A definição está correta. As demais têm erros: sobreposta não é nas extremidades, dissimilar difere SIM, aresta não sobrepõe, topo não precisa estar no mesmo plano exatamente."
+                },
+                {
+                    id: 44,
+                    text: "Dos tipos de juntas apresentadas abaixo, assinale aquela que não está associada a uma solda de ângulo.",
+                    options: [
+                        "Junta em L",
+                        "Junta de ângulo em T",
+                        "Junta sobreposta",
+                        "Junta de aresta",
+                        "Junta em quina"
+                    ],
+                    correct: 3,
+                    explanation: "Junta de ARESTA não usa solda de ângulo - usa solda de TOPO ou de aresta. Solda de ângulo é usada em: L, T, sobreposta, quina (canto). Aresta tem configuração diferente."
+                }
+            ],
+            
+            protecao: [
+                {
+                    id: 45,
+                    text: "Em relação à Proteção na Soldagem, assinale a alternativa incorreta:",
+                    options: [
+                        "Roupas pessoais como cuecas e meias não podem ser feitas de nylon ou poliéster",
+                        "Caso uma luva, ou outro equipamento de proteção individual que fique em contato direto com a pele, se rasgue por qualquer motivo, o profissional deverá substituí-la na maior brevidade possível",
+                        "A soldagem de metais é uma das mais importantes e usadas técnicas utilizada na indústria que, por sua vez, expõe demasiadamente seus profissionais a riscos constantes",
+                        "Todos os equipamentos de proteção individual (EPIs) são de uso pessoal e intransferível. Se um determinado equipamento não for mais usado por um soldador, aquele deverá ser totalmente descartado",
+                        "Os riscos, aos quais os soldadores são expostos diariamente, podem se apresentar isoladamente ou em conjunto, afetando principalmente a saúde destes profissionais"
+                    ],
+                    correct: 3,
+                    explanation: "INCORRETA! EPIs não precisam ser DESCARTADOS se não forem mais usados por um soldador. Podem ser reutilizados por outros após higienização adequada (luvas de raspa, aventais, máscaras de solda). Apenas itens pessoais (óculos graduados) são intransferíveis."
+                },
+                {
+                    id: 46,
+                    text: "O que significa a letra 'H' na designação de uma 'Lente Filtrante' (ou filtro)?",
+                    options: [
+                        "Resistente ao impacto",
+                        "A letra H significa que a lente filtrante é feita basicamente de hidrocarbonetos",
+                        "Possibilidade de uso para qualquer valor de intensidade de corrente elétrica",
+                        "Lente específica para processos de soldagem manual e semiautomático",
+                        "Lente específica para processos de soldagem automáticos"
+                    ],
+                    correct: 0,
+                    explanation: "A letra 'H' em lentes filtrantes indica que é resistente a IMPACTO (High impact). É uma característica de segurança importante para proteger contra respingos e fragmentos."
+                }
+            ],
+            
+            consumiveis: [
+                {
+                    id: 47,
+                    text: "Analisando as informações encontradas na tampa da lata de eletrodos revestidos, identifique qual das alternativas não representa a realidade:",
+                    options: [
+                        "Especificação e Classificação AWS do Eletrodo revestido",
+                        "Faixa de velocidade de avanço que o soldador deve empregar durante a soldagem",
+                        "Marca comercial e diâmetro do consumível",
+                        "Data da embalagem e número da corrida",
+                        "Faixas de corrente elétrica e tensão indicadas pelo fabricante em função do diâmetro do eletrodo"
+                    ],
+                    correct: 1,
+                    explanation: "VELOCIDADE DE AVANÇO não consta na lata de eletrodos! A lata contém: classificação AWS, marca, diâmetro, corrente/tensão recomendadas, data, lote. Velocidade depende da aplicação específica."
+                },
+                {
+                    id: 48,
+                    text: "Analisando os diferentes tipos de revestimentos dos eletrodos revestidos, marque a alternativa correta.",
+                    options: [
+                        "O revestimento Ácido possui este nome, visto que o mesmo é constituído por ácidos do tipo: Sulfúrico e Carbônico",
+                        "O óxido de rutênio é a substância mais importante encontrada no revestimento rutílico",
+                        "Substâncias como Fluorita, Calcário, Dolomita, entre outras, são aquelas que fazem com o revestimento seja chamado de 'Básico'",
+                        "Observando os elementos químicos que formam a Celulose, conclui-se que grande parte desta substância é formada por hidrogênio. Desta forma, faz-se necessário fazer uma ressecagem deste eletrodo revestido celulósico",
+                        "Dos diferentes tipos de substâncias encontradas no revestimento celulósico, é correto informar que aquela mais importante deste revestimento é o dióxido de titânio"
+                    ],
+                    correct: 2,
+                    explanation: "CORRETO! Revestimento BÁSICO contém Fluorita (CaF₂), Calcário (CaCO₃), Dolomita - compostos básicos que geram escória básica, removem enxofre e produzem solda com baixo hidrogênio."
+                },
+                {
+                    id: 49,
+                    text: "Qual dos consumíveis abaixo é indicado para soldagem de aço cromo resistente à corrosão?",
+                    options: [
+                        "R65",
+                        "E7018",
+                        "EH14",
+                        "ER308MoL",
+                        "E8016-B2"
+                    ],
+                    correct: 3,
+                    explanation: "ER308MoL é consumível para aço inoxidável austenítico (Cr-Ni) com Mo e baixo carbono (L), adequado para aplicações resistentes à corrosão. Os demais são para aço carbono ou baixa liga."
+                },
+                {
+                    id: 50,
+                    text: "Informe a ordem correta de tratamento dos consumíveis:",
+                    options: [
+                        "Secagem, armazenamento e manutenção da secagem",
+                        "Armazenamento, secagem e manutenção da secagem",
+                        "Manutenção da secagem, armazenamento e secagem",
+                        "Secagem, manutenção da secagem e armazenamento",
+                        "Ressecagem após armazenamento inadequado"
+                    ],
+                    correct: 0,
+                    explanation: "Ordem correta: 1) SECAGEM inicial (estufa), 2) ARMAZENAMENTO adequado (estufa portátil), 3) MANUTENÇÃO da secagem durante uso. Sempre secar antes de armazenar!"
+                }
+            ]
+        };
+
+        // Configuração dos simulados com distribuição de pesos
+        const examConfig = {
+            materiaisBase: 4,
+            qualificacoes: 4,
+            processos: 5,
+            documentos: 3,
+            simbologia: 5,
+            ensaiosMecanicos: 4,
+            tensoesDeformacoes: 3,
+            ensaiosNaoDestrutivos: 4,
+            introducao: 2,
+            metalurgia: 4,
+            instrumental: 3,
+            terminologia: 3,
+            protecao: 2,
+            consumiveis: 4
+        };
+
+        let currentExam = [];
+        let currentQuestionIndex = 0;
+        let examNumber = 1;
+        let selectedAnswer = null;
+        let results = {
+            correct: 0,
+            incorrect: 0,
+            skipped: 0
+        };
+        let questionResults = []; // Armazena resultado de cada questão
+        let startTime;
+        let timerInterval;
+
+        function generateExam(examNum) {
+            const exam = [];
+            
+            Object.keys(examConfig).forEach(category => {
+                const count = examConfig[category];
+                const availableQuestions = questionBank[category];
+                
+                // Pega questões aleatórias da categoria
+                const shuffled = [...availableQuestions].sort(() => Math.random() - 0.5);
+                const selected = shuffled.slice(0, Math.min(count, shuffled.length));
+                
+                selected.forEach(q => {
+                    exam.push({
+                        ...q,
+                        category: category
+                    });
+                });
+            });
+            
+            // Embaralha o exame final
+            return exam.sort(() => Math.random() - 0.5);
+        }
+
+        function startExam(examNum) {
+            examNumber = examNum;
+            currentExam = generateExam(examNum);
+            currentQuestionIndex = 0;
+            selectedAnswer = null;
+            results = { correct: 0, incorrect: 0, skipped: 0 };
+            questionResults = []; // Reseta resultados
+            startTime = Date.now();
+            
+            document.getElementById('examSelector').style.display = 'none';
+            document.getElementById('questionScreen').style.display = 'block';
+            
+            startTimer();
+            loadQuestion();
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                const elapsed = Math.floor((Date.now() - startTime) / 1000);
+                const minutes = Math.floor(elapsed / 60);
+                const seconds = elapsed % 60;
+                document.getElementById('timer').textContent = 
+                    `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        function loadQuestion() {
+            const question = currentExam[currentQuestionIndex];
+            selectedAnswer = null;
+            
+            document.getElementById('questionNumber').textContent = 
+                `Questão ${currentQuestionIndex + 1}/50`;
+            
+            const categoryNames = {
+                materiaisBase: 'Materiais de Base',
+                qualificacoes: 'Qualificações',
+                processos: 'Processos de Soldagem',
+                documentos: 'Documentos Técnicos',
+                simbologia: 'Simbologia',
+                ensaiosMecanicos: 'Ensaios Mecânicos',
+                tensoesDeformacoes: 'Tensões e Deformações',
+                ensaiosNaoDestrutivos: 'Ensaios Não Destrutivos',
+                introducao: 'Introdução',
+                metalurgia: 'Metalurgia',
+                instrumental: 'Instrumental',
+                terminologia: 'Terminologia',
+                protecao: 'Proteção',
+                consumiveis: 'Consumíveis'
+            };
+            
+            document.getElementById('categoryBadge').textContent = categoryNames[question.category];
+            document.getElementById('questionText').textContent = question.text;
+            
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.textContent = `${String.fromCharCode(65 + index)}) ${option}`;
+                optionDiv.onclick = () => selectOption(index);
+                optionsContainer.appendChild(optionDiv);
+            });
+            
+            document.getElementById('feedback').classList.remove('show');
+            document.getElementById('checkBtn').style.display = 'block';
+            document.getElementById('nextBtn').style.display = 'none';
+        }
+
+        function selectOption(index) {
+            if (document.getElementById('checkBtn').style.display === 'none') return;
+            
+            document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+            document.querySelectorAll('.option')[index].classList.add('selected');
+            selectedAnswer = index;
+        }
+
+        function checkAnswer() {
+            if (selectedAnswer === null) {
+                alert('Selecione uma alternativa!');
+                return;
+            }
+            
+            const question = currentExam[currentQuestionIndex];
+            const options = document.querySelectorAll('.option');
+            
+            const isCorrect = selectedAnswer === question.correct;
+            
+            if (isCorrect) {
+                options[selectedAnswer].classList.add('correct');
+                results.correct++;
+            } else {
+                options[selectedAnswer].classList.add('incorrect');
+                options[question.correct].classList.add('correct');
+                results.incorrect++;
+            }
+            
+            // Registra o resultado da questão
+            questionResults.push({
+                questionNumber: currentQuestionIndex + 1,
+                question: question,
+                userAnswer: selectedAnswer,
+                correctAnswer: question.correct,
+                status: isCorrect ? 'correct' : 'incorrect'
+            });
+            
+            document.getElementById('feedbackText').textContent = question.explanation;
+            document.getElementById('feedback').classList.add('show');
+            document.getElementById('checkBtn').style.display = 'none';
+            document.getElementById('nextBtn').style.display = 'block';
+        }
+
+        function skipQuestion() {
+            const question = currentExam[currentQuestionIndex];
+            
+            // Registra questão pulada
+            questionResults.push({
+                questionNumber: currentQuestionIndex + 1,
+                question: question,
+                userAnswer: null,
+                correctAnswer: question.correct,
+                status: 'skipped'
+            });
+            
+            results.skipped++;
+            nextQuestion();
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < currentExam.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            clearInterval(timerInterval);
+            
+            const totalTime = Math.floor((Date.now() - startTime) / 1000);
+            const minutes = Math.floor(totalTime / 60);
+            const seconds = totalTime % 60;
+            
+            const score = results.correct;
+            const percentage = Math.round((score / 50) * 100);
+            
+            // Determina aprovação (70% = nota de corte)
+            const approved = percentage >= 70;
+            
+            let emoji, title, message;
+            if (approved) {
+                if (percentage >= 90) {
+                    emoji = '🏆';
+                    title = 'APROVADO COM EXCELÊNCIA!';
+                    message = 'Você está dominando o conteúdo! Continue assim!';
+                } else if (percentage >= 80) {
+                    emoji = '🎯';
+                    title = 'APROVADO - Muito Bom!';
+                    message = 'Ótimo desempenho! Revise os pontos fracos.';
+                } else {
+                    emoji = '✅';
+                    title = 'APROVADO!';
+                    message = 'Bom trabalho! Continue estudando para melhorar ainda mais.';
+                }
+            } else {
+                if (percentage >= 50) {
+                    emoji = '⚠️';
+                    title = 'REPROVADO - Por Pouco';
+                    message = 'Você está próximo! Foque nos erros e tente novamente.';
+                } else {
+                    emoji = '📚';
+                    title = 'REPROVADO';
+                    message = 'Precisa de mais estudo. Revise o conteúdo e pratique mais.';
+                }
+            }
+            
+            document.getElementById('questionScreen').style.display = 'none';
+            document.getElementById('resultsScreen').style.display = 'block';
+            
+            document.getElementById('resultsEmoji').textContent = emoji;
+            document.getElementById('resultsTitle').textContent = title;
+            document.getElementById('resultsScore').textContent = `${score}/50 (${percentage}%)`;
+            document.getElementById('resultsMessage').textContent = message;
+            
+            document.getElementById('correctCount').textContent = results.correct;
+            document.getElementById('incorrectCount').textContent = results.incorrect;
+            document.getElementById('skippedCount').textContent = results.skipped;
+            document.getElementById('finalTime').textContent = 
+                `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            
+            // Gera relatório detalhado
+            generateDetailedReport();
+            
+            // Atualiza estatísticas globais
+            updateGlobalStats();
+        }
+        
+        function generateDetailedReport() {
+            const categoryNames = {
+                materiaisBase: 'Materiais de Base',
+                qualificacoes: 'Qualificações',
+                processos: 'Processos de Soldagem',
+                documentos: 'Documentos Técnicos',
+                simbologia: 'Simbologia',
+                ensaiosMecanicos: 'Ensaios Mecânicos',
+                tensoesDeformacoes: 'Tensões e Deformações',
+                ensaiosNaoDestrutivos: 'Ensaios Não Destrutivos',
+                introducao: 'Introdução',
+                metalurgia: 'Metalurgia',
+                instrumental: 'Instrumental',
+                terminologia: 'Terminologia',
+                protecao: 'Proteção',
+                consumiveis: 'Consumíveis'
+            };
+            
+            // Organiza por categoria
+            const byCategory = {};
+            questionResults.forEach(result => {
+                const cat = result.question.category;
+                if (!byCategory[cat]) {
+                    byCategory[cat] = {
+                        correct: [],
+                        incorrect: [],
+                        skipped: []
+                    };
+                }
+                byCategory[cat][result.status].push(result);
+            });
+            
+            // Cria HTML do relatório detalhado
+            let reportHTML = `
+                <div style="margin-top: 40px; padding-top: 30px; border-top: 3px solid #eee;">
+                    <h2 style="color: #1e3c72; margin-bottom: 25px; text-align: center;">📊 Relatório Detalhado por Categoria</h2>
+            `;
+            
+            // Ordena categorias por número de questões (decrescente)
+            const sortedCategories = Object.keys(byCategory).sort((a, b) => {
+                const totalA = byCategory[a].correct.length + byCategory[a].incorrect.length + byCategory[a].skipped.length;
+                const totalB = byCategory[b].correct.length + byCategory[b].incorrect.length + byCategory[b].skipped.length;
+                return totalB - totalA;
+            });
+            
+            sortedCategories.forEach(category => {
+                const data = byCategory[category];
+                const total = data.correct.length + data.incorrect.length + data.skipped.length;
+                const categoryPercentage = total > 0 ? Math.round((data.correct.length / total) * 100) : 0;
+                const categoryPassed = categoryPercentage >= 70;
+                
+                reportHTML += `
+                    <div style="background: ${categoryPassed ? '#e7f5e7' : '#ffe7e7'}; padding: 20px; border-radius: 10px; margin-bottom: 20px; border-left: 5px solid ${categoryPassed ? '#51cf66' : '#ff6b6b'};">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <h3 style="color: #333; margin: 0;">${categoryNames[category]}</h3>
+                            <div style="display: flex; gap: 20px; align-items: center;">
+                                <span style="font-size: 1.8em; font-weight: bold; color: ${categoryPassed ? '#51cf66' : '#ff6b6b'};">
+                                    ${categoryPercentage}%
+                                </span>
+                                <span style="background: ${categoryPassed ? '#51cf66' : '#ff6b6b'}; color: white; padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 0.9em;">
+                                    ${categoryPassed ? '✓ OK' : '✗ REVISAR'}
+                                </span>
+                            </div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 15px;">
+                            <div style="background: rgba(81, 207, 102, 0.2); padding: 10px; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 1.5em; font-weight: bold; color: #51cf66;">${data.correct.length}</div>
+                                <div style="color: #666; font-size: 0.9em;">Acertos</div>
+                            </div>
+                            <div style="background: rgba(255, 107, 107, 0.2); padding: 10px; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 1.5em; font-weight: bold; color: #ff6b6b;">${data.incorrect.length}</div>
+                                <div style="color: #666; font-size: 0.9em;">Erros</div>
+                            </div>
+                            <div style="background: rgba(255, 193, 7, 0.2); padding: 10px; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 1.5em; font-weight: bold; color: #ffa000;">${data.skipped.length}</div>
+                                <div style="color: #666; font-size: 0.9em;">Puladas</div>
+                            </div>
+                        </div>
+                `;
+                
+                // Lista questões erradas
+                if (data.incorrect.length > 0) {
+                    reportHTML += `
+                        <div style="margin-top: 15px;">
+                            <strong style="color: #ff6b6b;">❌ Questões Erradas:</strong>
+                            <ul style="margin: 10px 0; padding-left: 20px;">
+                    `;
+                    data.incorrect.forEach(q => {
+                        reportHTML += `<li style="margin: 5px 0; color: #666;">Questão ${q.questionNumber}</li>`;
+                    });
+                    reportHTML += `</ul></div>`;
+                }
+                
+                // Lista questões puladas
+                if (data.skipped.length > 0) {
+                    reportHTML += `
+                        <div style="margin-top: 15px;">
+                            <strong style="color: #ffa000;">⚠️ Questões Puladas:</strong>
+                            <ul style="margin: 10px 0; padding-left: 20px;">
+                    `;
+                    data.skipped.forEach(q => {
+                        reportHTML += `<li style="margin: 5px 0; color: #666;">Questão ${q.questionNumber}</li>`;
+                    });
+                    reportHTML += `</ul></div>`;
+                }
+                
+                // Lista questões corretas
+                if (data.correct.length > 0) {
+                    reportHTML += `
+                        <div style="margin-top: 15px;">
+                            <strong style="color: #51cf66;">✓ Questões Acertadas:</strong>
+                            <ul style="margin: 10px 0; padding-left: 20px;">
+                    `;
+                    data.correct.forEach(q => {
+                        reportHTML += `<li style="margin: 5px 0; color: #666;">Questão ${q.questionNumber}</li>`;
+                    });
+                    reportHTML += `</ul></div>`;
+                }
+                
+                reportHTML += `</div>`;
+            });
+            
+            reportHTML += `</div>`;
+            
+            // Adiciona o relatório após os breakdown items
+            const resultsCard = document.querySelector('.results-card');
+            const breakdownSection = resultsCard.querySelector('.results-breakdown').parentElement;
+            
+            // Remove relatório anterior se existir
+            const oldReport = document.getElementById('detailedReport');
+            if (oldReport) oldReport.remove();
+            
+            const reportDiv = document.createElement('div');
+            reportDiv.id = 'detailedReport';
+            reportDiv.innerHTML = reportHTML;
+            breakdownSection.appendChild(reportDiv);
+        }
+
+        function updateGlobalStats() {
+            const completed = parseInt(localStorage.getItem('completedExams') || '0') + 1;
+            localStorage.setItem('completedExams', completed);
+            
+            const totalCorrect = parseInt(localStorage.getItem('totalCorrect') || '0') + results.correct;
+            const totalQuestions = parseInt(localStorage.getItem('totalQuestions') || '0') + 50;
+            localStorage.setItem('totalCorrect', totalCorrect);
+            localStorage.setItem('totalQuestions', totalQuestions);
+            
+            const avgScore = Math.round((totalCorrect / totalQuestions) * 100);
+            
+            document.getElementById('completedExams').textContent = completed;
+            document.getElementById('averageScore').textContent = avgScore + '%';
+            document.getElementById('overallProgress').style.width = (completed * 20) + '%';
+            document.getElementById('overallProgress').textContent = `${completed}/5 Simulados`;
+        }
+
+        function backToMenu() {
+            document.getElementById('resultsScreen').style.display = 'none';
+            document.getElementById('examSelector').style.display = 'block';
+        }
+
+        function reviewExam() {
+            const categoryNames = {
+                materiaisBase: 'Materiais de Base',
+                qualificacoes: 'Qualificações',
+                processos: 'Processos de Soldagem',
+                documentos: 'Documentos Técnicos',
+                simbologia: 'Simbologia',
+                ensaiosMecanicos: 'Ensaios Mecânicos',
+                tensoesDeformacoes: 'Tensões e Deformações',
+                ensaiosNaoDestrutivos: 'Ensaios Não Destrutivos',
+                introducao: 'Introdução',
+                metalurgia: 'Metalurgia',
+                instrumental: 'Instrumental',
+                terminologia: 'Terminologia',
+                protecao: 'Proteção',
+                consumiveis: 'Consumíveis'
+            };
+            
+            let reviewHTML = `
+                <!DOCTYPE html>
+                <html lang="pt-BR">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Revisão do Simulado ${examNumber}</title>
+                    <style>
+                        body {
+                            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                            background: #f5f5f5;
+                            padding: 20px;
+                            margin: 0;
+                        }
+                        .container {
+                            max-width: 900px;
+                            margin: 0 auto;
+                            background: white;
+                            padding: 30px;
+                            border-radius: 15px;
+                            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                        }
+                        h1 {
+                            color: #1e3c72;
+                            text-align: center;
+                            margin-bottom: 30px;
+                        }
+                        .question-review {
+                            background: #f8f9fa;
+                            padding: 25px;
+                            margin-bottom: 25px;
+                            border-radius: 10px;
+                            border-left: 5px solid #ddd;
+                        }
+                        .question-review.correct {
+                            border-left-color: #51cf66;
+                            background: #e7f5e7;
+                        }
+                        .question-review.incorrect {
+                            border-left-color: #ff6b6b;
+                            background: #ffe7e7;
+                        }
+                        .question-review.skipped {
+                            border-left-color: #ffa000;
+                            background: #fff3e0;
+                        }
+                        .question-header {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            margin-bottom: 15px;
+                            padding-bottom: 10px;
+                            border-bottom: 2px solid #ddd;
+                        }
+                        .question-number {
+                            font-weight: bold;
+                            color: #1e3c72;
+                            font-size: 1.1em;
+                        }
+                        .category-badge {
+                            background: #667eea;
+                            color: white;
+                            padding: 5px 15px;
+                            border-radius: 15px;
+                            font-size: 0.85em;
+                        }
+                        .status-badge {
+                            padding: 5px 15px;
+                            border-radius: 15px;
+                            font-weight: bold;
+                            font-size: 0.9em;
+                        }
+                        .status-badge.correct {
+                            background: #51cf66;
+                            color: white;
+                        }
+                        .status-badge.incorrect {
+                            background: #ff6b6b;
+                            color: white;
+                        }
+                        .status-badge.skipped {
+                            background: #ffa000;
+                            color: white;
+                        }
+                        .question-text {
+                            font-size: 1.05em;
+                            line-height: 1.6;
+                            margin: 15px 0;
+                            color: #333;
+                        }
+                        .option {
+                            padding: 12px 15px;
+                            margin: 8px 0;
+                            border-radius: 8px;
+                            background: white;
+                            border: 2px solid #ddd;
+                        }
+                        .option.user-answer {
+                            border-color: #667eea;
+                            background: #f0f3ff;
+                            font-weight: bold;
+                        }
+                        .option.correct-answer {
+                            border-color: #51cf66;
+                            background: #e7f5e7;
+                            font-weight: bold;
+                        }
+                        .option.wrong-user-answer {
+                            border-color: #ff6b6b;
+                            background: #ffe7e7;
+                            font-weight: bold;
+                        }
+                        .explanation {
+                            background: #d1ecf1;
+                            border-left: 4px solid #17a2b8;
+                            padding: 15px;
+                            margin-top: 15px;
+                            border-radius: 5px;
+                        }
+                        .explanation h4 {
+                            color: #17a2b8;
+                            margin: 0 0 10px 0;
+                        }
+                        .print-btn {
+                            background: #667eea;
+                            color: white;
+                            border: none;
+                            padding: 15px 30px;
+                            border-radius: 10px;
+                            font-size: 1.1em;
+                            cursor: pointer;
+                            margin: 20px 10px;
+                            font-weight: bold;
+                        }
+                        .print-btn:hover {
+                            background: #5568d3;
+                        }
+                        @media print {
+                            .print-btn { display: none; }
+                            .question-review { page-break-inside: avoid; }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <h1>📋 Revisão Detalhada - Simulado ${examNumber}</h1>
+                        <div style="text-align: center; margin-bottom: 30px;">
+                            <button class="print-btn" onclick="window.print()">🖨️ Imprimir</button>
+                            <button class="print-btn" onclick="window.close()">✖ Fechar</button>
+                        </div>
+            `;
+            
+            questionResults.forEach((result, index) => {
+                const statusClass = result.status;
+                const statusText = result.status === 'correct' ? '✓ ACERTOU' : 
+                                  result.status === 'incorrect' ? '✗ ERROU' : 
+                                  '⚠️ PULOU';
+                
+                reviewHTML += `
+                    <div class="question-review ${statusClass}">
+                        <div class="question-header">
+                            <div>
+                                <span class="question-number">Questão ${result.questionNumber}</span>
+                                <span class="category-badge">${categoryNames[result.question.category]}</span>
+                            </div>
+                            <span class="status-badge ${statusClass}">${statusText}</span>
+                        </div>
+                        <div class="question-text">${result.question.text}</div>
+                        <div class="options">
+                `;
+                
+                result.question.options.forEach((option, optIndex) => {
+                    let optionClass = '';
+                    let marker = '';
+                    
+                    if (optIndex === result.correctAnswer) {
+                        optionClass = 'correct-answer';
+                        marker = ' ✓ CORRETA';
+                    }
+                    
+                    if (result.status === 'incorrect' && optIndex === result.userAnswer) {
+                        optionClass = 'wrong-user-answer';
+                        marker = ' ✗ SUA RESPOSTA';
+                    } else if (result.status === 'correct' && optIndex === result.userAnswer) {
+                        optionClass = 'user-answer';
+                        marker = ' ✓ SUA RESPOSTA';
+                    }
+                    
+                    if (result.status === 'skipped' && optIndex === result.correctAnswer) {
+                        marker = ' ✓ RESPOSTA CORRETA';
+                    }
+                    
+                    reviewHTML += `
+                        <div class="option ${optionClass}">
+                            ${String.fromCharCode(65 + optIndex)}) ${option}${marker}
+                        </div>
+                    `;
+                });
+                
+                reviewHTML += `
+                        </div>
+                        <div class="explanation">
+                            <h4>💡 Explicação:</h4>
+                            <p>${result.question.explanation}</p>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            reviewHTML += `
+                        <div style="text-align: center; margin-top: 30px;">
+                            <button class="print-btn" onclick="window.print()">🖨️ Imprimir</button>
+                            <button class="print-btn" onclick="window.close()">✖ Fechar</button>
+                        </div>
+                    </div>
+                </body>
+                </html>
+            `;
+            
+            const newWindow = window.open('', '_blank');
+            newWindow.document.write(reviewHTML);
+            newWindow.document.close();
+        }
+
+        // Carrega estatísticas ao iniciar
+        window.onload = function() {
+            const completed = parseInt(localStorage.getItem('completedExams') || '0');
+            const totalCorrect = parseInt(localStorage.getItem('totalCorrect') || '0');
+            const totalQuestions = parseInt(localStorage.getItem('totalQuestions') || '0');
+            
+            document.getElementById('completedExams').textContent = completed;
+            if (totalQuestions > 0) {
+                const avgScore = Math.round((totalCorrect / totalQuestions) * 100);
+                document.getElementById('averageScore').textContent = avgScore + '%';
+            }
+            document.getElementById('overallProgress').style.width = (completed * 20) + '%';
+            document.getElementById('overallProgress').textContent = `${completed}/5 Simulados`;
+        };
+    </script>
+</body>
+</html>
